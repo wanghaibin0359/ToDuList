@@ -1,0 +1,26 @@
+{
+  "name": "wanghb",
+  "version": "1.0.0",
+  "description": "todulist",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanghaibin0359/ToDuList.git"
+  },
+  "keywords": [
+    "todulist"
+  ],
+  "author": "wanghb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wanghaibin0359/ToDuList/issues"
+  },
+  "homepage": "https://github.com/wanghaibin0359/ToDuList#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.4.1"
+  }
+}
