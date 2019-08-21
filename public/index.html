@@ -7,22 +7,48 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>hellow word</h1>
-    <button onclick='ssss()'>按钮</button>
-    <button onclick='aaaa()'>按钮</button>
+    <div id='app'>
+            <h1>ToduList</h1>
+            <div class='add'>
+                <input type="text" v-model='addData'><button @click='addTodu'>添加</button>
+            </div>
+            <div class="doing">
+               <ul>
+                   <li>
+
+                   </li>
+               </ul>
+            </div>
+            <div class="done">
+
+            </div>
+    </div>
 </body>
+<script src='./vue.min.js'></script>
 <script src='./jquery.js'></script>
 <script>
-    function ssss(){
-        $.get('todu/getList',(res)=>{
-            console.log(res)
-        })
-    }
-    function aaaa(){
-        $.get('todu',(res)=>{
-            console.log(res)
-        })
-    }
+    
+  const app = new Vue({
+      el:'#app',
+      data:{
+          allList:[{id:1, data:'yes im fine', status:'done'},{id:2, data:'my no good fine', status:'doing'}],
+          addData:''
+      },
+      created(){
+
+      },
+      mounted(){
+
+      },
+      methods:{
+        addTodu(){
+            $.post('./todu/addList',{data:this.addData},(res)=>{
+                console.log(res)
+            })
+        }
+         
+      }
+  })
     
 </script>
 </html>
