@@ -5,23 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <style>
+        #app{
+            width:600px;
+            margin:100px auto;
+        }
+    </style>
 </head>
 <body>
     <div id='app'>
             <h1>ToduList</h1>
-            <div class='add'>
-                <input type="text" v-model='addData'><button @click='addTodu'>添加</button>
+            <div class='form-control ds-input container'> 
+                <div class='row p-3'>
+                        <input class="col-10" type="text" v-model='addData'><button class="col" @click='addTodu'>添加</button>
+                </div>
             </div>
-            <div class="doing">
-               <ul>
-                   <li>
-
-                   </li>
-               </ul>
+            <div class="panel panel-default">
+                    <h3>doing:</h3>
+                    <div v-for='item in doing' v-if='doing.length'>
+                            <div class="doing">
+                                <ul  class="list-group ">
+                                    <li  class="list-group-item text-danger">
+                                            <button  class='mr-5' @click='change(item,"done")'>完成</button>
+                                             {{item.data}}  
+                                             <button class='float-right' @click=deleteItem(item)>删除</button>
+                                    </li>
+                                </ul>
+                             </div>
+                    </div>
+                    <div e-else>
+                        place add toduList
+                    </div>
             </div>
-            <div class="done">
-
-            </div>
+           <div class="panel panel-default">
+                <h3>done:</h3>
+                <div v-for='item in done'>
+                        <div class="done">
+                            <ul  class="list-group">
+                                <li  class="list-group-item text-success">
+                                        <button class='mr-5' @click='change(item,"doing")'>未完成</button>
+                                        {{item.data}}  
+                                        <button class='float-right'  @click=deleteItem(item)>删除</button>
+                                </li>
+                            </ul>
+                         </div>
+                        
+                </div>
+           </div>
+           
     </div>
 </body>
 <script src='./vue.min.js'></script>
@@ -31,22 +63,54 @@
   const app = new Vue({
       el:'#app',
       data:{
-          allList:[{id:1, data:'yes im fine', status:'done'},{id:2, data:'my no good fine', status:'doing'}],
-          addData:''
+          allList:[],
+          addData:'',
+          search:{page:1,row:10,key:'',val:''}
+
       },
       created(){
-
+        this.Refresh()
+      },
+      computed:{
+        doing(){
+            return this.allList.filter((item)=>{
+                return item.status === 'doing'
+            })
+        },
+        done(){
+            return this.allList.filter((item)=>{
+                return item.status === 'done'
+            })
+        }
       },
       mounted(){
 
       },
       methods:{
+          Refresh(){
+            $.post('./todu/getList',this.search,(res)=>{
+                if(res.message){
+                    this.allList = res.data
+                }
+            })
+          },
         addTodu(){
             $.post('./todu/addList',{data:this.addData},(res)=>{
-                console.log(res)
+                this.addData=''
+              this.Refresh()
+            })
+        },
+        change(item,status){
+            $.post('./todu/change',{id:item.id,status},(res)=>{
+              this.Refresh()
+            })
+        },
+        deleteItem(item){
+            console.log(item)
+            $.post('./todu/delete',{id:item.id},(res)=>{
+              this.Refresh()
             })
         }
-         
       }
   })
     

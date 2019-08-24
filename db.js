@@ -5,10 +5,16 @@ var connection = mysql.createConnection({
   password : 'root',
   database : 'test'
 });
-
-function con(fn){
-    connection.connect()
-    fn(connection)
-    connection.end()
-}
-module.exports = con
+connection.connect()
+ 
+let query =function (sql,params){
+  return new Promise((resolve,reject)=>{
+    connection.query(sql,params,(err,res)=>{
+        if(err){
+          reject(err)
+        }
+        resolve(res)
+    })
+  })
+ }
+module.exports = query
