@@ -2,7 +2,8 @@
 SQLyog 企业版 - MySQL GUI v8.14 
 MySQL - 5.5.40 : Database - test
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -21,12 +22,12 @@ USE `test`;
 DROP TABLE IF EXISTS `todu`;
 
 CREATE TABLE `todu` (
-  `id` int(6) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `data` varchar(200) DEFAULT NULL,
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` varchar(20) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

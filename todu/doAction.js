@@ -32,7 +32,7 @@ router.post('/getList',(req,res,next)=>{
         
 })
 router.post('/addList',(req,res,next)=>{
-        let sql  = `insert todu(data,status) values(?,'doing')`;
+        let sql  = `insert todu(data,status) values(?,0)`;
         connection(sql,[req.body.data]).then(result=>{
             res.json({message:'true'})
         }).catch(err=>{

@@ -27,7 +27,7 @@
                             <div class="doing">
                                 <ul  class="list-group ">
                                     <li  class="list-group-item text-danger">
-                                            <button  class='mr-5' @click='change(item,"done")'>完成</button>
+                                            <button  class='mr-5' @click='change(item,1)'>完成</button>
                                              {{item.data}}  
                                              <button class='float-right' @click=deleteItem(item)>删除</button>
                                     </li>
@@ -44,7 +44,7 @@
                         <div class="done">
                             <ul  class="list-group">
                                 <li  class="list-group-item text-success">
-                                        <button class='mr-5' @click='change(item,"doing")'>未完成</button>
+                                        <button class='mr-5' @click='change(item,0)'>未完成</button>
                                         {{item.data}}  
                                         <button class='float-right'  @click=deleteItem(item)>删除</button>
                                 </li>
@@ -74,12 +74,12 @@
       computed:{
         doing(){
             return this.allList.filter((item)=>{
-                return item.status === 'doing'
+                return item.status === 0
             })
         },
         done(){
             return this.allList.filter((item)=>{
-                return item.status === 'done'
+                return item.status === 1
             })
         }
       },
