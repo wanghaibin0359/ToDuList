@@ -11,50 +11,50 @@
             width:600px;
             margin:100px auto;
         }
+        .text-align{
+            text-align: center;
+        }
+        .text-right{
+            text-align: right;
+        }
+        .text-decoration {
+            text-decoration: line-through;
+        } 
     </style>
 </head>
 <body>
     <div id='app'>
-            <h1>ToduList</h1>
+           <h1>TodoList</h1>
+            <div class='container p-2'>
+                <div class='row p-2'>
+                        <div class='col text-align'>
+                                <button class="btn btn-primary  mr-5" @click='changeStatus(2)'>all</button>
+                            <button class="btn btn-primary mr-5" @click='changeStatus(0)'>doing</button>
+                  
+                            <button class="btn btn-primary mr-5" @click='changeStatus(1)'>done</button>
+                   </div>
+                </div>
+               
+            </div>
             <div class='form-control ds-input container'> 
                 <div class='row p-3'>
-                        <input class="col-10" type="text" v-model='addData'><button class="col" @click='addTodu'>添加</button>
+                        <input class="col-10" type="text" v-model='addData' @keyup.enter='addTodu'><button class="col"  @click='addTodu'>添加</button>
                 </div>
             </div>
             <div class="panel panel-default">
-                    <h3>doing:</h3>
-                    <div v-for='item in doing' v-if='doing.length'>
-                            <div class="doing">
-                                <ul  class="list-group ">
-                                    <li  class="list-group-item text-danger">
-                                            <button  class='mr-5' @click='change(item,1)'>完成</button>
-                                             {{item.data}}  
-                                             <button class='float-right' @click=deleteItem(item)>删除</button>
-                                    </li>
-                                </ul>
-                             </div>
-                    </div>
-                    <div e-else>
-                        place add toduList
-                    </div>
-            </div>
-           <div class="panel panel-default">
-                <h3>done:</h3>
-                <div v-for='item in done'>
-                        <div class="done">
+                    <div v-for='item in allList'>
                             <ul  class="list-group">
-                                <li  class="list-group-item text-success">
-                                        <button class='mr-5' @click='change(item,0)'>未完成</button>
-                                        {{item.data}}  
-                                        <button class='float-right'  @click=deleteItem(item)>删除</button>
+                                <li  class="list-group-item" :class='item.status==1?"text-success text-decoration":"text-danger"'>
+                                        <button  class='mr-5' @click='change(item)'>{{item.status==1?'完成':'未成'}}</button>
+                                            {{item.data}}  
+                                            <button class='float-right' @click=deleteItem(item)>删除</button>
                                 </li>
                             </ul>
-                         </div>
-                        
-                </div>
-           </div>
-           
-    </div>
+                    </div>
+             </div>
+           <div class='text-right m-3'><button class="btn btn-primary" @click='prev'>上一页</button> {{search.page}}/{{maxPage}} <button class="btn btn-primary" @click='next'>下一页</button></div>
+    </div> 
+
 </body>
 <script src='./vue.min.js'></script>
 <script src='./jquery.js'></script>
@@ -65,13 +65,16 @@
       data:{
           allList:[],
           addData:'',
-          search:{page:1,row:10,key:'',val:''}
-
+          search:{page:1,row:10,key:'',val:''},
+          total:1
       },
       created(){
         this.Refresh()
       },
       computed:{
+          maxPage(){
+            return Math.ceil(this.total/this.search.row) 
+          },
         doing(){
             return this.allList.filter((item)=>{
                 return item.status === 0
@@ -86,11 +89,27 @@
       mounted(){
 
       },
+
       methods:{
+          prev(){
+            if(this.search.page ==1){
+                return
+            }
+            this.search.page-=1;
+            this.Refresh()
+          },
+          next(){
+            if(this.search.page ==this.maxPage){
+                return
+            }
+            this.search.page+=1;
+            this.Refresh()
+          },
           Refresh(){
             $.post('./todu/getList',this.search,(res)=>{
                 if(res.message){
                     this.allList = res.data
+                    this.total = res.total
                 }
             })
           },
@@ -100,13 +119,24 @@
               this.Refresh()
             })
         },
-        change(item,status){
+        changeStatus(flag){
+            if(flag==2){
+                this.search.key = ''
+                this.search.val = ''
+            }else{
+                this.search.key = 'status'
+                this.search.val = flag
+            }
+            this.Refresh()
+        },
+        change(item){
+            let status = item.status==1?0:1;
+console.log(status)
             $.post('./todu/change',{id:item.id,status},(res)=>{
               this.Refresh()
             })
         },
         deleteItem(item){
-            console.log(item)
             $.post('./todu/delete',{id:item.id},(res)=>{
               this.Refresh()
             })
