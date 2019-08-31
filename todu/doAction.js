@@ -11,10 +11,11 @@ router.get('/',(req,res,next)=>{
 router.post('/getList',(req,res,next)=>{
         let {page,row,key='',val=''}= req.body
         let sql  = `select * from todu `,
-            count = `select count(*)as"total" from todu`
+            count = `select count(*)as"total" from todu `
             params = [],params1 = [],resuss='';
             if(key){
-                sql+='where ??like? '
+                sql+='where ?? like ? '
+                count+='where ?? like ? '
                 params.push(key)
                 params.push('%'+val+'%')
                 params1.push(key)
@@ -27,8 +28,10 @@ router.post('/getList',(req,res,next)=>{
                 params.push((page-1)*row)
                 params.push(+row)
             }
+            console.log(count)
             Promise.all([connection(sql+resuss,params),connection(count,params1)])
             .then(result=>{
+                console.log(result)
                 res.json({message:'true',data:result[0],total:result[1][0].total})
             }).catch(err=>{
                 next(err)

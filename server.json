@@ -1,0 +1,19 @@
+{
+    "apps": [{
+      "name": "todoList",
+      "script": "app.js",
+      "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "watch": [
+        "todu"
+      ],
+      "ignore_watch": [
+        "app.js",
+        "node_modules",
+        "public"
+      ]
+    }]
+  }
+  
