@@ -45,7 +45,7 @@
                     <div v-for='item in allList'>
                             <ul  class="list-group">
                                 <li  class="list-group-item" :class='item.status==1?"text-success text-decoration":"text-danger"'>
-                                        <button  class='mr-5' @click='change(item)'>{{item.status==1?'完成':'未成'}}</button>
+                                        <button  class='mr-5' @click='change(item)'>{{item.status==1?'未完成':'完成'}}</button>
                                             {{item.data}}  
                                             <button class='float-right' @click=deleteItem(item)>删除</button>
                                 </li>
@@ -74,7 +74,7 @@
       },
       computed:{
           maxPage(){
-            return Math.ceil(this.total/this.search.row) 
+            return Math.ceil(this.total/this.search.row) || 1 
           },
         doing(){
             return this.allList.filter((item)=>{
@@ -129,6 +129,7 @@
                 this.search.key = 'status'
                 this.search.val = flag
             }
+            this.search.page=1
             this.Refresh()
         },
         change(item){
